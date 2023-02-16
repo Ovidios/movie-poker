@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+		<meta name="Description" content="jakob harych ⭐ internet person ⭐ video games">
+		<title>jakob rmh</title>
+		<link rel="stylesheet" href="./main.css">
+        <script>
+            // load info
+            movies = [];
+            fetch("./data.json")
+                .then(response => response.json())
+                .then(data => {
+                    movies = data;
+                    load_random_movie();
+                });
+
+            function load_random_movie() {
+                movie = movies[Math.floor(Math.random()*movies.length)];
+
+                // set base info
+                document.querySelector(".title").innerText = movie.title;
+                document.querySelector(".info").innerText = movie.synopsis;
+                document.querySelector(".genre").innerText = movie.genres;
+                document.querySelector(".score-tomatometer").innerText = movie.tomatometer + "%";
+                document.querySelector(".score-tomatometer").style.setProperty("--score", movie.tomatometer + "%");
+                document.querySelector(".score-audience").innerText = movie.audience + "%";
+                document.querySelector(".score-audience").style.setProperty("--score", movie.audience + "%");
+
+                // set misc-info
+                var misc = document.querySelector(".misc")
+                misc.innerHTML = "";
+                info = [
+                    `<div class="misc-info hidden" data-key="Director(s)">${movie.directors}</div>`,
+                    `<div class="misc-info hidden" data-key="Year of Release">${movie.year}</div>`,
+                    `<div class="misc-info hidden" data-key="Runtime">${movie.runtime}</div>`,
+                    `<div class="misc-info hidden" data-key="Actor(s)">${movie.actors}</div>`
+                ]
+                // shuffle
+                info = info
+                    .map(value => ({ value, sort: Math.random() }))
+                    .sort((a, b) => a.sort - b.sort)
+                    .map(({ value }) => value)
+                
+                info.forEach(i => {
+                    misc.innerHTML += i;
+                })
+
+                 // make all hidden elements become unhidden on click
+                document.querySelectorAll(".misc-info").forEach(e => {
+                    e.addEventListener("click", (e) => {
+                        e.target.classList.remove("hidden");
+                    })
+                })
+
+
+                // process info text
+                split_text();
+                console.log(movie);
+            }
+
+            function split_text() {
+                // split info into words
+                var info = document.querySelector(".info");
+                var words = info.innerText.split(" ");
+                console.log(words);
+                
+                // clear info box
+                info.innerHTML = "";
+                words.forEach(w => {
+                    info.innerHTML += `<div class="info-word hidden">${w}</div>`;
+                })
+
+                // make all hidden elements become unhidden on click
+                document.querySelectorAll(".info-word").forEach(e => {
+                    e.addEventListener("click", (e) => {
+                        e.target.classList.remove("hidden");
+                    })
+                })
+            }
+
+            window.onload = () => {
+                // make all hidden elements become unhidden on click
+                document.querySelectorAll(".hidden").forEach(e => {
+                    e.addEventListener("click", (e) => {
+                        e.target.classList.remove("hidden");
+                    })
+                })
+                // make clicking the title reveal all hidden
+                document.querySelector(".title").addEventListener("click", (e) => {
+                    document.querySelectorAll(".hidden").forEach(el => {
+                        el.classList.remove("hidden");
+                    })
+                })
+            }
+        </script>
+	</head>
+    <body>
+        <div class="main">
+            <div class="title hidden">STAR WARS: EPISODE VI -- RETURN OF THE JEDI</div>
+            <div class="genre hidden">Sci-Fi, Adventure, Action, Fantasy</div>
+            <div class="info">Luke Skywalker (Mark Hamill) battles horrible Jabba the Hut and cruel Darth Vader to save his comrades in the Rebel Alliance and triumph over the Galactic Empire. Han Solo (Harrison Ford) and Princess Leia (Carrie Fisher) reaffirm their love and team with Chewbacca, Lando Calrissian (Billy Dee Williams), the Ewoks and the androids C-3PO and R2-D2 to aid in the disruption of the Dark Side and the defeat of the evil emperor.</div>
+            <div class="score score-tomatometer hidden" style="--score:83%;">83%</div>
+            <div class="score score-audience hidden" style="--score:94%;">94%</div>
+            <div class="misc">
+                <div class="misc-info hidden" data-key="Director(s)">Richard Marquand</div>
+                <div class="misc-info hidden" data-key="Year of Release">1983</div>
+                <div class="misc-info hidden" data-key="Runtime">2h 13m</div>
+                <div class="misc-info hidden" data-key="Actor(s)">Mark Hamill, Harrison Ford, Carrie Fisher, Billy Dee Williams</div>
+            </div>
+        </div>
+    </body>
+</html>
