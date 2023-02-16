@@ -19,8 +19,31 @@
                     load_random_movie();
                 });
 
+            // get year range
+            year_min = localStorage.getItem('year-min');
+            year_max = localStorage.getItem('year-max');
+
+            if( !year_min || !year_max) {
+                localStorage.setItem("year-min", 1900);
+                year_min = 1900;
+                localStorage.setItem("year-max", 2023);
+                year_max = 2023;
+            }
+
+            function update_year_range() {
+                year_min = document.querySelector(".year-min").value;
+                year_max = document.querySelector(".year-max").value;
+
+                localStorage.setItem("year-min", year_min);
+                localStorage.setItem("year-max", year_max);
+            }
+
             function load_random_movie() {
                 movie = movies[Math.floor(Math.random()*movies.length)];
+
+                while(movie.year < year_min || movie.year > year_max) {
+                    movie = movies[Math.floor(Math.random()*movies.length)];
+                }
 
                 // set base info
                 document.querySelector(".title").innerText = movie.title;
@@ -84,6 +107,15 @@
             }
 
             window.onload = () => {
+                // set year range inputs
+                document.querySelector(".year-min").value = year_min;
+                document.querySelector(".year-max").value = year_max;
+                // attach year range change callback
+                document.querySelectorAll(".year").forEach(e => {
+                    e.addEventListener("change", (e) => {
+                        update_year_range();
+                    })
+                })
                 // make all hidden elements become unhidden on click
                 document.querySelectorAll(".hidden").forEach(e => {
                     e.addEventListener("click", (e) => {
@@ -101,6 +133,8 @@
 	</head>
     <body>
         <div class="main">
+            <input class="year year-min" type="number" min="1900" max="2023" step="1" value="1900" />
+            <input class="year year-max" type="number" min="1900" max="2023" step="1" value="2023" />
             <div class="title hidden">STAR WARS: EPISODE VI -- RETURN OF THE JEDI</div>
             <div class="genre hidden">Sci-Fi, Adventure, Action, Fantasy</div>
             <div class="info">Luke Skywalker (Mark Hamill) battles horrible Jabba the Hut and cruel Darth Vader to save his comrades in the Rebel Alliance and triumph over the Galactic Empire. Han Solo (Harrison Ford) and Princess Leia (Carrie Fisher) reaffirm their love and team with Chewbacca, Lando Calrissian (Billy Dee Williams), the Ewoks and the androids C-3PO and R2-D2 to aid in the disruption of the Dark Side and the defeat of the evil emperor.</div>

@@ -22,7 +22,8 @@ body {
     margin: 0 auto;
     width: 90%;
     border: 5px solid var(--accent);
-    height: 90vh;
+    height: max-content;
+    min-height: 90vh;
     position: relative;
     top: 5vh;
     display: grid;
@@ -197,4 +198,21 @@ body {
     100% {
         transform: scale(105%) rotate(2.5deg)
     }
+}
+
+.year {
+    position: absolute;
+    top: -25px;
+    left: -25px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 5px;
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    width: 100px;
+}
+
+.year-max {
+    left: 100px;
 }

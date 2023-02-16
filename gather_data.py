@@ -13,6 +13,7 @@ for year in years:
     soup = BeautifulSoup(html, "html.parser")
     tds = soup.find_all("td")
     num = 0
+    max_num = 25
     for td in tds:
         a = td.find("a")
         if a:
@@ -20,7 +21,7 @@ for year in years:
             if not "\n\n" in text:
                 num += 1
                 # only take top 25 movies
-                if num > 25:
+                if num > max_num:
                     break
                 movies.append(text)
 
@@ -46,7 +47,7 @@ for movie in movies:
 
     # append info to output
     output.append({
-        "title": movie,
+        "title": info.movie_title,
         "tomatometer": info.tomatometer,
         "audience": info.audience_score,
         "genres": ", ".join(info.genres),
